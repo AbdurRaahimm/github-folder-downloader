@@ -29,8 +29,13 @@ code .
 
 ## Features 
 
+- Download a github repository.
 - Download a folder from a github repository.
 - Download a single file from a github repository.
+- See Folder and file structure.
+- Download the folder as a zip file.
+- See Folder Details.
+- Add back Button to go back to the previous folder.
 
 ## Technologies Used
 
@@ -42,6 +47,7 @@ code .
 ## Screenshots 
 ![alt text](images/image.png)
 ![alt text](images/image-1.png)
+![alt text](images/image-2.png)
 
 ## Live Demo 
 
