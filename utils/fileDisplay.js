@@ -1,5 +1,6 @@
 import { downloadFolder } from './downloadFolder.js';
 const fileOutput = document.querySelector('.fileOutput');
+const input = document.querySelector('form input');
 
 // Function to display the contents of a repository
 export const fileDisplay = async (repoUrl) => {
@@ -24,7 +25,7 @@ export const fileDisplay = async (repoUrl) => {
             <h4 class="text-center text-xl font-bold bg-gradient-to-r from-green-600 to-cyan-700 bg-clip-text text-transparent">Repository: ${repo}</h4>
             <h4 class="text-center text-xl font-bold bg-gradient-to-r from-green-600 to-cyan-700 bg-clip-text text-transparent"> ${folderPath && `Folder: ${folderPath}`} </h4>
             <h4 class="text-center text-xl font-bold bg-gradient-to-r from-green-600 to-cyan-700 bg-clip-text text-transparent">Total Files: ${data.length}</h4>
-    
+            <button id="backFolder" class="bg-gradient-to-r from-green-600 to-cyan-700 text-white py-1 px-2 rounded m-2">Back</button>
             <hr>
           <div class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-xl bg-clip-border">
             <table class="w-full text-left table-auto min-w-max">
@@ -70,7 +71,7 @@ export const fileDisplay = async (repoUrl) => {
                         </td>
                         <td class="p-4 border-b border-blue-gray-50">
                         <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900 capitalize">
-                            ${file.type}
+                            ${file.type === 'file' ? 'file' : 'folder'}
                         </p>
                         </td>
                         <td class="p-4 border-b border-blue-gray-50">
@@ -80,7 +81,7 @@ export const fileDisplay = async (repoUrl) => {
                         </td>
                         <td class="p-4 border-b border-blue-gray-50">
                        
-                            ${file.type === 'file' ? `<a href="${file.download_url}" target="_blank" class="bg-gradient-to-r from-green-600 to-cyan-700 text-white py-1 px-2 rounded" download>Download file</a>` : ''}
+                            ${file.type === 'file' ? `<a href="${file.download_url}" target="_blank" class="bg-gradient-to-r from-green-600 to-cyan-700 text-white py-1 px-2 rounded" download>Download file</a>` : `<a id="folderDetails" href="${file._links.html}" target="_blank" class="bg-gradient-to-r from-green-600 to-cyan-700 text-white py-1 px-2 rounded capitalize">see folder</a>`}
                         
                         </td>
                     </tr>
@@ -107,5 +108,36 @@ fileOutput.addEventListener('click', async (e) => {
     if (e.target.id === 'gitDown') {
         console.log('Downloading...');
         await downloadFolder(repoUrl);
+    }
+});
+
+// Event listener to display the contents of a folder
+fileOutput.addEventListener('click', async (e) => {
+    if (e.target.id === 'folderDetails') {
+        e.preventDefault();
+        const folderUrl = e.target.href;
+        await fileDisplay(folderUrl);
+        input.value = folderUrl;
+    }
+});
+
+// Event listener to go back to the previous folder
+fileOutput.addEventListener('click', async (e) => {
+    if (e.target.id === 'backFolder') {
+        e.preventDefault();
+        const url = new URL(input.value);
+        const pathname = url.pathname;
+        const pathParts = pathname.split('/');
+        // if pathParts.length === 5, then it is a repository not remove 
+        if (pathParts.length === 5) {
+            alert('You are at the root of the repository!');
+            return;
+        }
+
+        const folderPath = pathParts.slice(0, -1).join('/');
+        // console.log(folderPath);
+        const folderUrl = `https://github.com${folderPath}`;
+        await fileDisplay(folderUrl);
+        input.value = folderUrl;
     }
 });
