@@ -25,7 +25,7 @@ export const fileDisplay = async (repoUrl) => {
             <h4 class="text-center text-xl font-bold bg-gradient-to-r from-green-600 to-cyan-700 bg-clip-text text-transparent">Repository: ${repo}</h4>
             <h4 class="text-center text-xl font-bold bg-gradient-to-r from-green-600 to-cyan-700 bg-clip-text text-transparent"> ${folderPath && `Folder: ${folderPath}`} </h4>
             <h4 class="text-center text-xl font-bold bg-gradient-to-r from-green-600 to-cyan-700 bg-clip-text text-transparent">Total Files: ${data.length}</h4>
-            <button id="backFolder" class="bg-gradient-to-r from-green-600 to-cyan-700 text-white py-1 px-2 rounded m-2">Back</button>
+            ${folderPath && `<button id="backFolder" class="bg-gradient-to-r from-green-600 to-cyan-700 text-white py-1 px-2 rounded m-2">Back to previous folder</button>`}
             <hr>
           <div class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-xl bg-clip-border">
             <table class="w-full text-left table-auto min-w-max">
@@ -61,7 +61,7 @@ export const fileDisplay = async (repoUrl) => {
                     <tr>
                         <td class="p-4 border-b border-blue-gray-50">
                         <p class="block font-sans text-sm antialiased font-normal leading-normal text-blue-gray-900">
-                            ${data.indexOf(file) + 1}
+                           ${data.indexOf(file) + 1}
                         </p>
                         </td>
                         <td class="p-4 border-b border-blue-gray-50">
