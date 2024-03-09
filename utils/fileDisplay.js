@@ -81,7 +81,7 @@ export const fileDisplay = async (repoUrl) => {
                         </td>
                         <td class="p-4 border-b border-blue-gray-50">
                        
-                            ${file.type === 'file' ? `<a href="${file.download_url}" target="_blank" class="bg-gradient-to-r from-green-600 to-cyan-700 text-white py-1 px-2 rounded" download>Download file</a>` : `<a id="folderDetails" href="${file._links.html}" target="_blank" class="bg-gradient-to-r from-green-600 to-cyan-700 text-white py-1 px-2 rounded capitalize">see folder</a>`}
+                            ${file.type === 'file' ? `<a id="rawFileDownload" href="${file.download_url}" target="_blank" class="bg-gradient-to-r from-green-600 to-cyan-700 text-white py-1 px-2 rounded" download>Download file</a>` : `<a id="folderDetails" href="${file._links.html}" target="_blank" class="bg-gradient-to-r from-green-600 to-cyan-700 text-white py-1 px-2 rounded capitalize">see folder</a>`}
                         
                         </td>
                     </tr>
@@ -99,7 +99,7 @@ export const fileDisplay = async (repoUrl) => {
            `;
 
     } catch (error) {
-        alert(error.message, 'Invalid URL!  Enter extact URL of the repository!');
+        alert('Invalid URL! Please enter a valid repository URL');
     }
 };
 
@@ -139,5 +139,22 @@ fileOutput.addEventListener('click', async (e) => {
         const folderUrl = `https://github.com${folderPath}`;
         await fileDisplay(folderUrl);
         input.value = folderUrl;
+    }
+});
+
+// Event listener to download a raw file from the repository
+fileOutput.addEventListener('click', async (e) => {
+    if (e.target.id === 'rawFileDownload') {
+        e.preventDefault();
+        const fileUrl = e.target.href;
+        const response = await fetch(fileUrl);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileUrl.split('/').pop();
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
     }
 });

@@ -29,7 +29,8 @@ export const downloadFolder = async (repoUrl) => {
     const blobUrl = URL.createObjectURL(content);
     const link = document.createElement('a');
     link.href = blobUrl;
-    link.download = `${repo}.zip`;
+    // download name repo and folder name taken last part of the folder path
+    link.download = `${repo}-${folderPath.split('/').pop()}.zip`;
     link.click();
     link.remove();
     URL.revokeObjectURL(blobUrl);
